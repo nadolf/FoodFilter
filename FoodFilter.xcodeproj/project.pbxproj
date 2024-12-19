@@ -10,9 +10,22 @@
 		BC0474F32D147DA700E6DB7E /* FoodFilter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodFilter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		BC0475142D14899300E6DB7E /* Exceptions for "FoodFilter" folder in "FoodFilter" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = BC0474F22D147DA700E6DB7E /* FoodFilter */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		BC0474F52D147DA700E6DB7E /* FoodFilter */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BC0475142D14899300E6DB7E /* Exceptions for "FoodFilter" folder in "FoodFilter" target */,
+			);
 			path = FoodFilter;
 			sourceTree = "<group>";
 		};
@@ -255,6 +268,8 @@
 				DEVELOPMENT_TEAM = NB75ZH5NB8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FoodFilter/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera required for Preview";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -284,6 +299,8 @@
 				DEVELOPMENT_TEAM = NB75ZH5NB8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FoodFilter/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Camera required for Preview";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

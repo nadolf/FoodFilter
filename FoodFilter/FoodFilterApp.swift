@@ -1,17 +1,12 @@
-//
-//  FoodFilterApp.swift
-//  FoodFilter
-//
-//  Created by Nadolf Tagoe on 12/19/24.
-//
-
 import SwiftUI
 
 @main
 struct FoodFilterApp: App {
+    @StateObject private var model = ScannerModelView()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ScannerView(image: model.frame)
+                .ignoresSafeArea()
         }
     }
 }
