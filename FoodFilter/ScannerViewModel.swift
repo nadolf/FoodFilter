@@ -1,7 +1,7 @@
 import AVFoundation
 import CoreImage
 
-class ScannerModelView: NSObject, ObservableObject {
+class ScannerViewModel: NSObject, ObservableObject {
     @Published var frame: CGImage?
     private var permissionGranted = false
     private let captureSession = AVCaptureSession()
@@ -54,7 +54,7 @@ class ScannerModelView: NSObject, ObservableObject {
     }
 }
 
-extension ScannerModelView: AVCaptureVideoDataOutputSampleBufferDelegate {
+extension ScannerViewModel: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         guard let cgImage = imageFromSampleBuffer(sampleBuffer: sampleBuffer) else { return }
         
