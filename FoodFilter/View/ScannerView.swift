@@ -4,6 +4,7 @@ struct ScannerView: View {
     var image: CGImage?
     var scannedBarcode: String?
     var ingredientsInfo: String?
+    @ObservedObject var authViewModel: AuthViewModel
     
     private let label = Text("frame")
     
@@ -49,11 +50,19 @@ struct ScannerView: View {
                         .cornerRadius(8)
                         .padding(.bottom, 20)
                 }
+                
+                // Sign Out Button
+                Button(action: {
+                    authViewModel.signOut()
+                }) {
+                    Text("Sign Out")
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.red)
+                        .cornerRadius(8)
+                }
+                .padding(.bottom, 20)
             }
         }
     }
-}
-
-#Preview {
-    ScannerView()
 }

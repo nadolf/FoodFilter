@@ -21,7 +21,6 @@ class ScannerViewModel: NSObject, ObservableObject {
     }
 }
 
-// Permissions
 extension ScannerViewModel {
     private func checkPermission() {
         switch AVCaptureDevice.authorizationStatus(for: .video) {
