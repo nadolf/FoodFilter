@@ -3,6 +3,8 @@ import SwiftUI
 struct SignUpView: View {
     @ObservedObject var authViewModel: AuthViewModel
     
+    @State private var firstName: String = ""
+    @State private var lastName: String = ""
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var confirmPassword: String = ""
@@ -14,6 +16,12 @@ struct SignUpView: View {
                 .font(.largeTitle)
                 .fontWeight(.bold)
             
+            TextField("First Name", text: $firstName)
+                .cornerRadius(8)
+            
+            TextField("Last Name", text: $lastName)
+                .cornerRadius(8)
+
             // Email Field
             TextField("Email", text: $email)
                 .textContentType(.emailAddress)
@@ -71,7 +79,7 @@ struct SignUpView: View {
     }
     
     private func handleSignUp() {
-        guard !email.isEmpty, !password.isEmpty, !confirmPassword.isEmpty else {
+        guard !firstName.isEmpty, !lastName.isEmpty, !email.isEmpty, !password.isEmpty, !confirmPassword.isEmpty else {
             authViewModel.errorMessage = "Please fill in all fields."
             return
         }
@@ -82,6 +90,6 @@ struct SignUpView: View {
         }
         
         let emptyDietaryRestrictions: [String] = []
-        authViewModel.signUp(email: email, password: password, dietaryRestrictions: emptyDietaryRestrictions)
+        authViewModel.signUp(firstName: firstName, lastName: lastName, email: email, password: password, dietaryRestrictions: emptyDietaryRestrictions)
     }
 }

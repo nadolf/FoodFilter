@@ -14,12 +14,12 @@ class AuthViewModel: ObservableObject {
         }
     }
     
-    func signUp(email: String, password: String, dietaryRestrictions: [String]) {
+    func signUp(firstName: String, lastName: String, email: String, password: String, dietaryRestrictions: [String]) {
         Auth.auth().createUser(withEmail: email, password: password) { [weak self] result, error in
             if let error = error {
                 self?.errorMessage = error.localizedDescription
             } else if let authUser = result?.user {
-                let newUser = UserModel(id: authUser.uid, email: email, dietaryRestrictions: dietaryRestrictions)
+                let newUser = UserModel(id: authUser.uid, firstName: firstName, lastName: lastName, email: email, dietaryRestrictions: dietaryRestrictions)
                 self?.saveUserToFirestore(user: newUser)
             }
         }
@@ -52,10 +52,12 @@ class AuthViewModel: ObservableObject {
                 self?.errorMessage = error.localizedDescription
             } else if let document = document, document.exists {
                 let data = document.data()
+                let firstName = data?["firstName"] as? String ?? ""
+                let lastName = data?["lastName"] as? String ?? ""
                 let email = data?["email"] as? String ?? ""
                 let dietaryRestrictions = data?["dietaryRestrictions"] as? [String] ?? []
                 
-                self?.user = UserModel(id: userID, email: email, dietaryRestrictions: dietaryRestrictions)
+                self?.user = UserModel(id: userID, firstName: firstName, lastName: lastName, email: email, dietaryRestrictions: dietaryRestrictions)
                 self?.isAuthenticated = true
             }
         }
@@ -63,6 +65,8 @@ class AuthViewModel: ObservableObject {
     
     private func saveUserToFirestore(user: UserModel) {
         db.collection("users").document(user.id).setData([
+            "firstName": user.firstName,
+            "lastName": user.lastName,
             "email": user.email,
             "dietaryRestrictions": user.dietaryRestrictions
         ]) { [weak self] error in
