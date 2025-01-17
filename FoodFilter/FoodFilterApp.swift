@@ -19,12 +19,9 @@ struct FoodFilterApp: App {
         WindowGroup {
             NavigationStack {
                 if authViewModel.isAuthenticated {
-                    ScannerView(
-                        image: scannerViewModel.frame,
-                        scannedBarcode: scannerViewModel.scannedBarcode,
-                        ingredientsInfo: scannerViewModel.ingredientsInfo,
-                        authViewModel: authViewModel
-                    )
+                    ContentView()
+                        .environmentObject(authViewModel)
+                        .environmentObject(scannerViewModel)
                 } else {
                     SignInView(authViewModel: authViewModel)
                 }

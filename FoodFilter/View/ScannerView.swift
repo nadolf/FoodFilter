@@ -22,7 +22,7 @@ struct ScannerView: View {
             
             VStack {
                 Spacer()
-                
+
                 if let barcode = scannedBarcode {
                     Text("Scanned Barcode: \(barcode)")
                         .font(.headline)
@@ -50,19 +50,9 @@ struct ScannerView: View {
                         .cornerRadius(8)
                         .padding(.bottom, 20)
                 }
-                
-                // Sign Out Button
-                Button(action: {
-                    authViewModel.signOut()
-                }) {
-                    Text("Sign Out")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.red)
-                        .cornerRadius(8)
-                }
-                .padding(.bottom, 20)
+                Spacer()
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }
