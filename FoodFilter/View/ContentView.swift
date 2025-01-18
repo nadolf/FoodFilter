@@ -18,9 +18,8 @@ struct ContentView: View {
     }
 
     var body: some View {
-        if authViewModel.isAuthenticated {
+        if let user = authViewModel.user, authViewModel.isAuthenticated {
             ZStack {
-                // Main content view
                 Group {
                     switch selectedTab {
                     case .activity:
@@ -33,12 +32,14 @@ struct ContentView: View {
                             authViewModel: authViewModel
                         )
                     case .profile:
-                        ProfileView(authViewModel: authViewModel)
+                        ProfileView(authViewModel: authViewModel, userModel: Binding(
+                            get: { user },
+                            set: { authViewModel.user = $0 }
+                        ))
                     }
                 }
                 .ignoresSafeArea(edges: .bottom)
 
-                // Floating tab bar
                 VStack {
                     Spacer()
                     HStack {

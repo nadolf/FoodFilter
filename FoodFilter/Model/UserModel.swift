@@ -2,9 +2,9 @@ import Foundation
 
 struct UserModel: Identifiable, Codable {
     let id: String
-    let firstName: String
-    let lastName: String
-    let email: String
+    var firstName: String
+    var lastName: String
+    var email: String
     var dietaryRestrictions: [String]
     
     init(id: String, firstName: String, lastName: String, email: String, dietaryRestrictions: [String] = []) {
