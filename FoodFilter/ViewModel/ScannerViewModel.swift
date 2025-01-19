@@ -146,7 +146,7 @@ extension ScannerViewModel {
                    let product = json["product"] as? [String: Any],
                    let ingredients = product["ingredients_text"] as? String {
                     DispatchQueue.main.async {
-                        self.ingredientsInfo = "Ingredients: \(ingredients)"
+                        self.ingredientsInfo = " \(ingredients)"
                     }
                 } else {
                     DispatchQueue.main.async {
