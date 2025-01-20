@@ -1,10 +1,12 @@
 import AVFoundation
 import CoreImage
+import FirebaseFirestore
 
 class ScannerViewModel: NSObject, ObservableObject {
     @Published var frame: CGImage?
     @Published var scannedBarcode: String?
     @Published var ingredientsInfo: String = "Scan to see ingredients"
+    var dietaryRestrictions: [String] = [] // Add this property
     
     private var permissionGranted = false
     private let captureSession = AVCaptureSession()
@@ -19,7 +21,22 @@ class ScannerViewModel: NSObject, ObservableObject {
             self?.captureSession.startRunning()
         }
     }
+    
+    func checkDietaryRestrictions(for ingredients: String) -> Bool {
+        let ingredientList = ingredients.lowercased()
+            .components(separatedBy: ",")
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+        
+        let restrictedIngredients = ingredientList.filter { ingredient in
+            dietaryRestrictions.contains(where: { restriction in
+                ingredient.contains(restriction.lowercased())
+            })
+        }
+        
+        return restrictedIngredients.isEmpty
+    }
 }
+
 
 extension ScannerViewModel {
     private func checkPermission() {
@@ -144,9 +161,13 @@ extension ScannerViewModel {
             do {
                 if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                    let product = json["product"] as? [String: Any],
+                   let productName = product["product_name"] as? String,
                    let ingredients = product["ingredients_text"] as? String {
+                    
                     DispatchQueue.main.async {
-                        self.ingredientsInfo = " \(ingredients)"
+                        self.ingredientsInfo = ingredients
+                        let meetsDietaryNeeds = self.checkDietaryRestrictions(for: ingredients)
+                        self.saveToDatabase(name: productName, ingredients: ingredients, meetsDietaryNeeds: meetsDietaryNeeds)
                     }
                 } else {
                     DispatchQueue.main.async {
@@ -161,3 +182,25 @@ extension ScannerViewModel {
         }.resume()
     }
 }
+
+extension ScannerViewModel {
+    func saveToDatabase(name: String, ingredients: String, meetsDietaryNeeds: Bool) {
+        let db = Firestore.firestore()
+        let scannedItem = ScannedItem(
+            id: UUID().uuidString,
+            name: name,
+            ingredients: ingredients,
+            meetsDietaryNeeds: meetsDietaryNeeds,
+            timestamp: Date()
+        )
+        
+        db.collection("scannedItems").addDocument(data: scannedItem.toDictionary()) { error in
+            if let error = error {
+                print("Error saving to database: \(error.localizedDescription)")
+            } else {
+                print("Scanned item saved successfully.")
+            }
+        }
+    }
+}
+
