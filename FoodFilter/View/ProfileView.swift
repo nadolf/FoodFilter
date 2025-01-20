@@ -46,9 +46,3 @@ struct ProfileView: View {
         }
     }
 }
-
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView(authViewModel: AuthViewModel(), userModel: .constant(UserModel(id: "1", firstName: "John", lastName: "Doe", email: "john.doe@example.com", dietaryRestrictions: [])))
-    }
-}
