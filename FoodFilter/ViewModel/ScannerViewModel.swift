@@ -1,4 +1,5 @@
 import AVFoundation
+import SwiftUICore
 import CoreImage
 import FirebaseFirestore
 
@@ -6,12 +7,17 @@ class ScannerViewModel: NSObject, ObservableObject {
     @Published var frame: CGImage?
     @Published var scannedBarcode: String?
     @Published var ingredientsInfo: String = "Scan to see ingredients"
-    var dietaryRestrictions: [String] = [] // Add this property
+    @Published var dietaryResultBackground: Color = .black.opacity(0.5)
+    @Published var dietaryResultTextColor: Color = .white
+    var dietaryRestrictions: [String] = []
     
     private var permissionGranted = false
     private let captureSession = AVCaptureSession()
     private let sessionQueue = DispatchQueue(label: "sessionQueue")
     private let context = CIContext()
+    private var isScanning = false
+    private var isCameraRunning = true
+    private var hasFetchedIngredients = false
     
     override init() {
         super.init()
@@ -36,7 +42,6 @@ class ScannerViewModel: NSObject, ObservableObject {
         return restrictedIngredients.isEmpty
     }
 }
-
 
 extension ScannerViewModel {
     private func checkPermission() {
@@ -95,7 +100,16 @@ extension ScannerViewModel {
             metadataOutput.metadataObjectTypes = [.ean8, .ean13, .pdf417, .qr, .upce, .code128]
         }
     }
-
+    
+    func startStopCaptureSession() {
+        sessionQueue.async { [weak self] in
+            if self?.isCameraRunning ?? false {
+                self?.captureSession.startRunning()
+            } else {
+                self?.captureSession.stopRunning()
+            }
+        }
+    }
 }
 
 extension ScannerViewModel: AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -121,11 +135,20 @@ extension ScannerViewModel: AVCaptureMetadataOutputObjectsDelegate {
         from connection: AVCaptureConnection
     ) {
         if let metadataObject = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
-           let scannedValue = metadataObject.stringValue {
+           let scannedValue = metadataObject.stringValue,
+           !isScanning {
+            isScanning = true
             DispatchQueue.main.async { [weak self] in
                 self?.scannedBarcode = scannedValue
-                self?.captureSession.stopRunning()
+                self?.isCameraRunning = false
+                self?.hasFetchedIngredients = false
                 self?.fetchIngredientsInfo(for: scannedValue)
+                // Restart the camera after 3 seconds
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    self?.isCameraRunning = true
+                    self?.resetScanner()
+                    self?.isScanning = false
+                }
             }
         }
     }
@@ -134,6 +157,9 @@ extension ScannerViewModel: AVCaptureMetadataOutputObjectsDelegate {
 // Fetch Item Ingredients from API
 extension ScannerViewModel {
     func fetchIngredientsInfo(for barcode: String) {
+        guard !hasFetchedIngredients else { return }
+        hasFetchedIngredients = true
+        
         guard let url = URL(string: "https://world.openfoodfacts.org/api/v2/product/\(barcode).json") else {
             DispatchQueue.main.async {
                 self.ingredientsInfo = "Invalid barcode URL."
@@ -204,3 +230,12 @@ extension ScannerViewModel {
     }
 }
 
+extension ScannerViewModel {
+    func resetScanner() {
+        scannedBarcode = nil
+        ingredientsInfo = "Scan to see ingredients"
+        dietaryResultBackground = .black.opacity(0.5)
+        dietaryResultTextColor = .white
+        hasFetchedIngredients = false
+    }
+}
