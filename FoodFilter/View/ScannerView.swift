@@ -1,4 +1,5 @@
 import SwiftUI
+import AVFoundation
 
 struct ScannerView: View {
     var image: CGImage?
@@ -10,6 +11,7 @@ struct ScannerView: View {
     @State private var alertMessage = ""
     @State private var dietaryResultBackground: Color = .black.opacity(0.5)
     @State private var dietaryResultTextColor: Color = .white
+    @State private var isFlashOn = false
     
     private let label = Text("frame")
     
@@ -26,6 +28,20 @@ struct ScannerView: View {
             }
             
             VStack {
+                HStack {
+                    Spacer()
+                    Button(action: toggleFlash) {
+                        Image(systemName: isFlashOn ? "flashlight.on.fill" : "flashlight.off.fill")
+                            .font(.title)
+                            .foregroundColor(isFlashOn ? .yellow : .white)
+                            .padding()
+                            .background(Color.black.opacity(0.5))
+                            .clipShape(Circle())
+                            .shadow(radius: 5)
+                    }
+                    .padding()
+                    .padding(.trailing, 50)
+                }
                 Spacer()
                 
                 if let barcode = scannedBarcode {
@@ -55,8 +71,8 @@ struct ScannerView: View {
                             .background(dietaryResultBackground)
                             .cornerRadius(8)
                             .padding(.bottom, 20)
-                            .frame(maxWidth: .infinity, alignment: .center)  // Dynamically adjusting the width
-                            .padding(.horizontal, 20)  // Add some padding for better layout
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.horizontal, 20)
                     }
                 }
                 
@@ -69,6 +85,19 @@ struct ScannerView: View {
                 if let _ = scannedBarcode {
                     _ = checkDietaryRestrictions()
                 }
+            }
+        }
+    }
+    
+    private func toggleFlash() {
+        isFlashOn.toggle()
+        if let device = AVCaptureDevice.default(for: .video), device.hasTorch {
+            do {
+                try device.lockForConfiguration()
+                device.torchMode = isFlashOn ? .on : .off
+                device.unlockForConfiguration()
+            } catch {
+                print("Flash toggle failed: \(error.localizedDescription)")
             }
         }
     }
