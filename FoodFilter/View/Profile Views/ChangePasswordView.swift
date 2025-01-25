@@ -17,22 +17,25 @@ struct ChangePasswordView: View {
                 
                 SecureField("Confirm New Password", text: $confirmPassword)
             }
-
+            
             if let errorMessage = errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
                     .font(.footnote)
             }
-
-            Button(action: changePassword) {
-                Text("Save Changes")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(isFormValid() ? Color.blue : Color.gray)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
+            
+            Section {
+                Button(action: changePassword) {
+                    Text("Save Changes")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(isFormValid() ? Color.blue : Color.gray)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                .disabled(!isFormValid())
             }
-            .disabled(!isFormValid())
+            .listRowBackground(Color.clear)
         }
         .navigationTitle("Change Password")
         .alert("Password Updated", isPresented: $showAlert) {

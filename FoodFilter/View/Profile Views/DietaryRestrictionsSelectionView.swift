@@ -21,17 +21,21 @@ struct DietaryRestrictionsSelectionView: View {
                 .navigationTitle("Dietary Restrictions")
                 .environment(\.editMode, .constant(.active))
 
-                Button(action: saveDietaryRestrictions) {
-                    Text("Save Selections")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(10)
-                }
-                .padding()
+                VStack(spacing: 10) {
+                    Button(action: saveDietaryRestrictions) {
+                        Text("Save Selections")
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                    }
 
-                Text("\(multiSelection.count) selections")
-                    .padding(.top)
+                    Text("\(multiSelection.count) selections")
+                        .foregroundColor(.gray)
+                }
+                .padding([.leading, .trailing, .top])
+                .background(Color.clear)
             }
         }
     }

@@ -37,15 +37,18 @@ struct ChangeNameView: View {
                         .padding()
                 }
                 
-                Button(action: updateName) {
-                    Text(isLoading ? "Updating..." : "Save Changes")
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(isLoading ? Color.gray : Color.blue)
-                        .cornerRadius(10)
+                Section{
+                    Button(action: updateName) {
+                        Text(isLoading ? "Updating..." : "Save Changes")
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(isLoading ? Color.gray : Color.blue)
+                            .cornerRadius(10)
+                    }
+                    .disabled(isLoading)
                 }
-                .disabled(isLoading)
+                .listRowBackground(Color.clear)
             }
             .navigationTitle("Change Name")
             .navigationBarTitleDisplayMode(.inline)

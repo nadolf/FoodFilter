@@ -23,7 +23,9 @@ struct FoodFilterApp: App {
                         .environmentObject(authViewModel)
                         .environmentObject(scannerViewModel)
                 } else {
-                    SignInView(authViewModel: authViewModel)
+                    SplashView(authViewModel: authViewModel)
+                        .environmentObject(authViewModel)
+                        .environmentObject(scannerViewModel)
                 }
             }
             .ignoresSafeArea()
