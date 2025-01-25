@@ -4,6 +4,7 @@ struct ContentView: View {
     @StateObject private var authViewModel = AuthViewModel()
     @StateObject private var scannerViewModel = ScannerViewModel()
     @State private var selectedTab: Tab = .activity
+    @State private var isLoading: Bool = true
 
     init() {
         let appearance = UITabBarAppearance()
@@ -18,8 +19,8 @@ struct ContentView: View {
     }
 
     var body: some View {
-        if let user = authViewModel.user, authViewModel.isAuthenticated {
-            ZStack {
+        ZStack {
+            if let user = authViewModel.user, authViewModel.isAuthenticated {
                 Group {
                     switch selectedTab {
                     case .activity:
@@ -71,9 +72,35 @@ struct ContentView: View {
                     )
                     .frame(height: 80)
                 }
+            } else {
+                SignInView(authViewModel: authViewModel)
             }
-        } else {
-            SignInView(authViewModel: authViewModel)
+
+            if isLoading {
+                LoadingView()
+            }
+        }
+        .onAppear {
+            // Simulate data loading
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                isLoading = false
+            }
+        }
+    }
+}
+
+struct LoadingView: View {
+    var body: some View {
+        ZStack {
+            Color.white.opacity(0.5)
+                .edgesIgnoringSafeArea(.all)
+
+            VStack {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                Text("Loading...")
+                    .font(.headline)
+            }
         }
     }
 }
