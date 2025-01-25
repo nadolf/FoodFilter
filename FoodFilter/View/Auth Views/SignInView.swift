@@ -8,58 +8,83 @@ struct SignInView: View {
     @State private var showPassword: Bool = false
     
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 24) {
+            // Title
             Text("Sign In")
                 .font(.largeTitle)
                 .fontWeight(.bold)
-            
+                .foregroundColor(.blue)
+
             // Email Field
             TextField("Email", text: $email)
                 .textContentType(.emailAddress)
                 .keyboardType(.emailAddress)
                 .autocapitalization(.none)
-                .cornerRadius(8)
-            
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 1)
+                .padding(.horizontal)
+
             // Password Field
             if showPassword {
                 TextField("Password", text: $password)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 1)
+                    .padding(.horizontal)
             } else {
                 SecureField("Password", text: $password)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 1)
+                    .padding(.horizontal)
             }
             
-            Toggle("Show Password", isOn: $showPassword)
-            
+            // Toggle to show/hide password
+            HStack {
+                Spacer()
+                Toggle("Show Password", isOn: $showPassword)
+                    .accentColor(.blue) // Accent color for toggle
+                    .padding(.horizontal)
+            }
+
             // Sign In Button
             Button(action: {
                 handleSignIn()
             }) {
                 Text("Sign In")
+                    .font(.headline)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(Color.blue)
-                    .cornerRadius(8)
+                    .cornerRadius(10)
+                    .padding(.horizontal)
             }
-            
+
             // Error Message
             if let errorMessage = authViewModel.errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
                     .font(.caption)
                     .multilineTextAlignment(.center)
-                    .padding()
+                    .padding(.top, 10)
             }
             
             Spacer()
             
-            // Navigation to Sign Up
             HStack {
                 Text("Don't have an account?")
                 NavigationLink("Sign Up", destination: SignUpView(authViewModel: authViewModel))
+                    .foregroundColor(.blue)
             }
+            .padding(.top, 20)
         }
         .navigationBarBackButtonHidden(true)
-        .padding()
+        .padding(.top, 40)
     }
     
     private func handleSignIn() {

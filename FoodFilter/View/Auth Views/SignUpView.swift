@@ -11,39 +11,80 @@ struct SignUpView: View {
     @State private var showPassword: Bool = false
     
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 24) {
             Text("Sign Up")
                 .font(.largeTitle)
                 .fontWeight(.bold)
-            
+                .foregroundColor(.blue)
+
+            // First Name Field
             TextField("First Name", text: $firstName)
-                .cornerRadius(8)
-            
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 1)
+                .padding(.horizontal)
+
+            // Last Name Field
             TextField("Last Name", text: $lastName)
-                .cornerRadius(8)
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 1)
+                .padding(.horizontal)
 
             // Email Field
             TextField("Email", text: $email)
                 .textContentType(.emailAddress)
                 .keyboardType(.emailAddress)
                 .autocapitalization(.none)
-                .cornerRadius(8)
-            
+                .padding()
+                .background(Color.white)
+                .cornerRadius(10)
+                .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 1)
+                .padding(.horizontal)
+
             // Password Field
             if showPassword {
                 TextField("Password", text: $password)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 1)
+                    .padding(.horizontal)
             } else {
                 SecureField("Password", text: $password)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 1)
+                    .padding(.horizontal)
             }
             
             // Confirm Password Field
             if showPassword {
                 TextField("Confirm Password", text: $confirmPassword)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 1)
+                    .padding(.horizontal)
             } else {
                 SecureField("Confirm Password", text: $confirmPassword)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(color: Color.gray.opacity(0.3), radius: 5, x: 0, y: 1)
+                    .padding(.horizontal)
             }
             
-            Toggle("Show Password", isOn: $showPassword)
+            // Toggle to show/hide password
+            HStack {
+                Spacer()
+                Toggle("Show Password", isOn: $showPassword)
+                    .accentColor(.blue)
+                    .padding(.horizontal)
+            }
             
             // Sign Up Button
             Button(action: {
@@ -53,17 +94,18 @@ struct SignUpView: View {
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
+                    .background(Color.blue) // Accent color for the button
+                    .cornerRadius(10)
+                    .shadow(color: Color.blue.opacity(0.3), radius: 5, x: 0, y: 5)
+                    .padding(.horizontal)
             }
-            
-            // Error Message
+
             if let errorMessage = authViewModel.errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
                     .font(.caption)
                     .multilineTextAlignment(.center)
-                    .padding()
+                    .padding(.top, 10)
             }
             
             Spacer()
@@ -72,10 +114,13 @@ struct SignUpView: View {
             HStack {
                 Text("Already have an account?")
                 NavigationLink("Sign In", destination: SignInView(authViewModel: authViewModel))
+                    .foregroundColor(.blue)
             }
+            .padding(.top, 20)
         }
         .padding()
         .navigationBarBackButtonHidden(true)
+        .padding(.top, 40)
     }
     
     private func handleSignUp() {
