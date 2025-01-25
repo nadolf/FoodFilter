@@ -27,6 +27,41 @@ struct ScannerView: View {
                     .edgesIgnoringSafeArea(.all)
             }
             
+            GeometryReader { geometry in
+                let frameSize: CGFloat = 250
+                let lineThickness: CGFloat = 4
+                let cornerLength: CGFloat = 30
+                let offset: CGFloat = 50
+
+                Path { path in
+                    path.move(to: CGPoint(x: geometry.size.width / 2 - frameSize / 2, y: geometry.size.height / 2 - frameSize / 2 - offset + cornerLength))
+                    path.addLine(to: CGPoint(x: geometry.size.width / 2 - frameSize / 2, y: geometry.size.height / 2 - frameSize / 2 - offset))
+                    path.addLine(to: CGPoint(x: geometry.size.width / 2 - frameSize / 2 + cornerLength, y: geometry.size.height / 2 - frameSize / 2 - offset))
+                }
+                .stroke(Color.gray, lineWidth: lineThickness)
+
+                Path { path in
+                    path.move(to: CGPoint(x: geometry.size.width / 2 + frameSize / 2, y: geometry.size.height / 2 - frameSize / 2 - offset + cornerLength))
+                    path.addLine(to: CGPoint(x: geometry.size.width / 2 + frameSize / 2, y: geometry.size.height / 2 - frameSize / 2 - offset))
+                    path.addLine(to: CGPoint(x: geometry.size.width / 2 + frameSize / 2 - cornerLength, y: geometry.size.height / 2 - frameSize / 2 - offset))
+                }
+                .stroke(Color.gray, lineWidth: lineThickness)
+
+                Path { path in
+                    path.move(to: CGPoint(x: geometry.size.width / 2 - frameSize / 2, y: geometry.size.height / 2 + frameSize / 2 - offset - cornerLength))
+                    path.addLine(to: CGPoint(x: geometry.size.width / 2 - frameSize / 2, y: geometry.size.height / 2 + frameSize / 2 - offset))
+                    path.addLine(to: CGPoint(x: geometry.size.width / 2 - frameSize / 2 + cornerLength, y: geometry.size.height / 2 + frameSize / 2 - offset))
+                }
+                .stroke(Color.gray, lineWidth: lineThickness)
+
+                Path { path in
+                    path.move(to: CGPoint(x: geometry.size.width / 2 + frameSize / 2, y: geometry.size.height / 2 + frameSize / 2 - offset - cornerLength))
+                    path.addLine(to: CGPoint(x: geometry.size.width / 2 + frameSize / 2, y: geometry.size.height / 2 + frameSize / 2 - offset))
+                    path.addLine(to: CGPoint(x: geometry.size.width / 2 + frameSize / 2 - cornerLength, y: geometry.size.height / 2 + frameSize / 2 - offset))
+                }
+                .stroke(Color.gray, lineWidth: lineThickness)
+            }
+
             VStack {
                 HStack {
                     Spacer()
@@ -51,7 +86,7 @@ struct ScannerView: View {
                         .padding()
                         .background(Color.black.opacity(0.5))
                         .cornerRadius(8)
-                        .padding(.bottom, 10)
+                        .padding(.top, 300)
                 } else {
                     Text("Scanning for Barcode...")
                         .font(.subheadline)
@@ -59,7 +94,7 @@ struct ScannerView: View {
                         .padding()
                         .background(Color.black.opacity(0.5))
                         .cornerRadius(8)
-                        .padding(.bottom, 10)
+                        .padding(.top, 300)
                 }
                 
                 if scannedBarcode != nil {
