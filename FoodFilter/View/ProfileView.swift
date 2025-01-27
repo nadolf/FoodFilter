@@ -34,7 +34,7 @@ struct ProfileView: View {
                     }
                 }
             }
-            .listStyle(GroupedListStyle())
+            .listStyle(.insetGrouped)
             .navigationTitle("Profile")
             .navigationBarTitleDisplayMode(.inline)
             
