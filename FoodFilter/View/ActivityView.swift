@@ -71,7 +71,7 @@ struct ActivityView: View {
     
     private func fetchScannedItems() {
         let db = Firestore.firestore()
-        db.collection("scannedItems").getDocuments { snapshot, error in
+        db.collection("scannedItems").order(by: "timestamp", descending: true).getDocuments { snapshot, error in
             if let error = error {
                 print("Error fetching scanned items: \(error.localizedDescription)")
                 self.isLoading = false
